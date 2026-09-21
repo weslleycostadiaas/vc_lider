@@ -83,7 +83,7 @@ export const TEXTOS_PONTO_FORTE: Record<Pilar, string[]> = {
 };
 
 
-const SITE_URL = "https://funil-leader-landing.lovable.app";
+const SITE_URL = "https://radar.julienesalvan.com.br";
 
 export function montarVideoPageUrl(pilar: Pilar): string {
   return `${SITE_URL}/video?pilar=${encodeURIComponent(VIDEO_COVERS[pilar].slug)}`;

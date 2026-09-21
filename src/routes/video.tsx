@@ -7,10 +7,11 @@ import { encontrarCapaPorSlug } from "@/lib/video-covers";
 
 const CTA_LINKS = {
   lideranca: "#",
-  equipe: "#",
+  equipe:
+    "https://api.whatsapp.com/send?phone=5511911777958&text=Quero%20Atendimento%20com%20especialista",
 };
 
-const COVER_URL = "https://funil-leader-landing.lovable.app/__l5e/assets-v1/9bee6876-3c73-49d9-b722-f89cf68bc0b7/radar-video-cover.jpg";
+const COVER_URL = "https://radar.julienesalvan.com.br/__l5e/assets-v1/9bee6876-3c73-49d9-b722-f89cf68bc0b7/radar-video-cover.jpg";
 
 
 export const Route = createFileRoute("/video")({

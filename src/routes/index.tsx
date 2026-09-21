@@ -22,10 +22,10 @@ export const Route = createFileRoute("/")({
           "Em 3 minutos, descubra onde a sua liderança trava e o primeiro passo pra evoluir.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://funil-leader-landing.lovable.app/" },
+      { property: "og:url", content: "https://radar.julienesalvan.com.br/" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://funil-leader-landing.lovable.app/" }],
+    links: [{ rel: "canonical", href: "https://radar.julienesalvan.com.br/" }],
   }),
   component: Index,
 });

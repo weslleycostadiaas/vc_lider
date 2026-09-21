@@ -46,10 +46,10 @@ export const Route = createFileRoute("/diagnostico")({
           "12 perguntas rápidas para descobrir a sua nota de liderança e receber a análise completa por e-mail.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://funil-leader-landing.lovable.app/diagnostico" },
+      { property: "og:url", content: "https://radar.julienesalvan.com.br/diagnostico" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://funil-leader-landing.lovable.app/diagnostico" }],
+    links: [{ rel: "canonical", href: "https://radar.julienesalvan.com.br/diagnostico" }],
   }),
   component: Diagnostico,
 });

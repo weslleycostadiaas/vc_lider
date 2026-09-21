@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://funil-leader-landing.lovable.app/sitemap.xml
+Sitemap: https://radar.julienesalvan.com.br/sitemap.xml

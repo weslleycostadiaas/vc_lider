@@ -27,4 +27,3 @@ npm run dev
 - TypeScript
 - React
 - Tailwind CSS
-# vc_lider
