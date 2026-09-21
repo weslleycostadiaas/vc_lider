@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Clock, ShieldCheck, Target } from "lucide-react";
 import { useEffect } from "react";
 
-import julieneAsset from "../assets/juliene-salvan.webp.asset.json";
+const julieneUrl = "/images/juliene-salvan.webp";
 import { salvarRastreioDaUrl } from "../lib/rastreio";
 
 export const Route = createFileRoute("/")({
@@ -82,7 +82,7 @@ function Index() {
         <div className="mt-14 flex flex-col items-center gap-5 md:flex-row md:justify-center md:text-left">
           <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-full border border-lead-border bg-lead-card">
             <img
-              src={julieneAsset.url}
+              src={julieneUrl}
               alt="Foto profissional de Juliene Salvan"
               className="h-full w-full object-cover"
             />
