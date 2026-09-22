@@ -1,8 +1,3 @@
-import capaAcao from "@/assets/capa-video-acao.jpeg.asset.json";
-import capaAprendizado from "@/assets/capa-video-aprendizado-continuo.jpeg.asset.json";
-import capaMentalidade from "@/assets/capa-video-mentalidade.jpeg.asset.json";
-import capaPessoas from "@/assets/capa-video-pessoas.jpeg.asset.json";
-import capaPadrao from "@/assets/radar-video-cover.jpg.asset.json";
 import type { Pilar } from "@/lib/radar";
 
 const BIBLIOTECA = "750581";
@@ -32,28 +27,28 @@ export type CapaVideo = {
 
 export const VIDEO_COVERS: Record<Pilar, CapaVideo> = {
   Mentalidade: {
-    url: capaMentalidade.url,
+    url: "/images/capa-video-mentalidade.jpeg",
     slug: "mentalidade",
     alt: "Pilar crítico Mentalidade — da reação à escolha",
     videoEmbedUrl: embedUrl(VIDEO_IDS.mentalidade),
     videoUrl: playUrl(VIDEO_IDS.mentalidade),
   },
   "Ação": {
-    url: capaAcao.url,
+    url: "/images/capa-video-acao.jpeg",
     slug: "acao",
     alt: "Pilar crítico Ação — da intenção ao resultado",
     videoEmbedUrl: embedUrl(VIDEO_IDS.acao),
     videoUrl: playUrl(VIDEO_IDS.acao),
   },
   Pessoas: {
-    url: capaPessoas.url,
+    url: "/images/capa-video-pessoas.jpeg",
     slug: "pessoas",
     alt: "Pilar crítico Pessoas — relações que desenvolvem",
     videoEmbedUrl: embedUrl(VIDEO_IDS.pessoas),
     videoUrl: playUrl(VIDEO_IDS.pessoas),
   },
   "Aprendizado Contínuo": {
-    url: capaAprendizado.url,
+    url: "/images/capa-video-aprendizado-continuo.jpeg",
     slug: "aprendizado-continuo",
     alt: "Pilar crítico Aprendizado Contínuo — da experiência à evolução",
     videoEmbedUrl: embedUrl(VIDEO_IDS["aprendizado-continuo"]),
@@ -62,7 +57,7 @@ export const VIDEO_COVERS: Record<Pilar, CapaVideo> = {
 };
 
 export const DEFAULT_VIDEO_COVER: CapaVideo = {
-  url: capaPadrao.url,
+  url: "/images/capa-video-mentalidade.jpeg",
   slug: "mentalidade",
   alt: "Análise em vídeo do Radar do Líder",
   videoEmbedUrl: embedUrl(VIDEO_IDS.mentalidade),
