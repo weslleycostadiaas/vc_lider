@@ -11,7 +11,7 @@ const CTA_LINKS = {
     "https://api.whatsapp.com/send?phone=5511911777958&text=Quero%20Atendimento%20com%20especialista",
 };
 
-const COVER_URL = "https://radar.julienesalvan.com.br/images/capa-video-mentalidade.jpeg";
+const COVER_URL = "https://funil-leader-landing.lovable.app/images/capa-video-mentalidade.jpeg";
 
 
 export const Route = createFileRoute("/video")({
