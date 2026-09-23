@@ -351,7 +351,7 @@ export function montarHtmlResultado({
   </td></tr>
 
   <tr><td style="padding:26px 0 0;text-align:center;">
-    <a href="${montarVideoPageUrl(resultado.pilarCritico)}" target="_blank" style="display:inline-block;border-radius:999px;background:${CORES.terracotta};color:#fffaf2;font-size:15px;font-weight:700;text-decoration:none;padding:14px 28px;">Quero aprimorar minha Lideran&#231;a</a>
+    <a href="https://pay.hotmart.com/T105324426S?bid=1790122656752" target="_blank" style="display:inline-block;border-radius:999px;background:${CORES.terracotta};color:#fffaf2;font-size:15px;font-weight:700;text-decoration:none;padding:14px 28px;">Quero aprimorar minha Lideran&#231;a</a>
   </td></tr>
 
   <tr><td style="padding:22px 0 0;text-align:center;font-size:12px;line-height:1.7;color:${CORES.inkMuted};">

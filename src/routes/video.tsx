@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { encontrarCapaPorSlug } from "@/lib/video-covers";
 
 const CTA_LINKS = {
-  lideranca: "#",
+  lideranca: "https://pay.hotmart.com/T105324426S?bid=1790122656752",
   equipe:
-    "https://web.whatsapp.com/send/?phone=5511911777958&text=Quero%20Atendimento%20com%20especialista",
+    "https://api.whatsapp.com/send?phone=5511911777958&text=Quero%20Atendimento%20com%20especialista",
 };
 
 const COVER_URL = "https://radar.julienesalvan.com.br/images/capa-video-mentalidade.jpeg";
