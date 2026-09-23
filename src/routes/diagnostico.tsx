@@ -299,6 +299,7 @@ function Captura({
     dispararLeadPixel(eventoId);
 
     try {
+      const videoPageUrl = montarVideoPageUrl(resultado.pilarCritico);
       const html = montarHtmlResultado({
         nome: nome.trim(),
         email: email.trim(),
@@ -330,7 +331,10 @@ function Captura({
           rastreio: coletarRastreio(),
           texto_ponto_forte: TEXTOS_PONTO_FORTE[resultado.pontoForte].join("\n\n"),
           html_video: montarBlocoVideoHtml(resultado),
-          video_url: montarVideoPageUrl(resultado.pilarCritico),
+          video_url: videoPageUrl,
+          link_video: videoPageUrl,
+          link_analise_completa: videoPageUrl,
+          dominio_site: "https://radar.julienesalvan.com.br",
           pilares: resultado.pilares,
           respostas,
           data: new Date().toISOString(),
