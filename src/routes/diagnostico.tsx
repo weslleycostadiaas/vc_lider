@@ -70,6 +70,27 @@ function Diagnostico() {
 
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
 
+  useEffect(() => {
+    if (etapa !== "perguntas" || typeof window === "undefined") return;
+    const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
+    w.dataLayer = w.dataLayer || [];
+    const pergunta = PERGUNTAS[indice];
+    w.dataLayer.push({
+      event: "etapaQuiz",
+      etapa_numero: indice + 1,
+      etapa_total: PERGUNTAS.length,
+      etapa_nome: `pergunta_${indice + 1}`,
+      pilar: (pergunta as { pilar?: string })?.pilar,
+    });
+  }, [etapa, indice]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || etapa === "perguntas") return;
+    const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
+    w.dataLayer = w.dataLayer || [];
+    w.dataLayer.push({ event: "etapaQuiz", etapa_nome: etapa });
+  }, [etapa]);
+
   function responder(valor: number) {
     if (selecionada !== null) return;
     setSelecionada(valor);
