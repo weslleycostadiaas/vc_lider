@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { encontrarCapaPorSlug } from "@/lib/video-covers";
 
 const CTA_LINKS = {
-  lideranca: "https://pay.hotmart.com/T105324426S?bid=1790122656752",
+  lideranca: "https://vclider1.julienesalvan.com.br/",
   equipe:
     "https://api.whatsapp.com/send?phone=5511911777958&text=Quero%20Atendimento%20com%20especialista",
 };
@@ -113,7 +113,7 @@ function VideoPage() {
           O próximo passo da sua liderança começa aqui
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-lead-cream-muted md:text-lg">
-          Assista à análise da Juliene e veja onde concentrar a sua atenção para transformar
+          No vídeo abaixo, eu vou aprofundar o seu resultado e mostrar como transformar
           consciência em evolução prática.
         </p>
 

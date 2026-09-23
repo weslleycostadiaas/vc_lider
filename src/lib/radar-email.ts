@@ -272,7 +272,7 @@ export function montarBlocoVideoHtml(resultado: Resultado): string {
   const videoPageUrl = montarVideoPageUrl(pilar);
   const videoCoverUrl = `${SITE_URL}${VIDEO_COVERS[pilar].url}`;
   return `<div style="border:1px solid ${CORES.border};border-radius:16px;background:${CORES.card};padding:22px;">
-    <h2 style="margin:0 0 10px;font-size:19px;line-height:1.3;color:${CORES.ink};">Seu diagnóstico completo (e o que eu vi na sua ${escapar(pilar)})</h2>
+    <h2 style="margin:0 0 10px;font-size:19px;line-height:1.3;color:${CORES.ink};">Seu diagnóstico completo (e o que eu vi no seu Pilar ${escapar(pilar)})</h2>
     <p style="margin:0 0 12px;font-size:14px;line-height:1.7;color:${CORES.inkMuted};">Você fez o Radar e ficou como <strong style="color:${CORES.ink};">${escapar(resultado.nivel.titulo)}</strong>, com ${resultado.notaGeral} de 100. O seu pilar mais frágil hoje é <strong style="color:${CORES.ink};">${escapar(pilar)}</strong>, e é sobre ele que eu quero falar com você.</p>
     <a href="${videoPageUrl}" target="_blank" style="display:block;text-decoration:none;">
       <img src="${videoCoverUrl}" width="556" alt="Abrir a análise em vídeo do pilar ${escapar(pilar)}" style="display:block;width:100%;max-width:556px;height:auto;border:0;border-radius:14px;outline:none;text-decoration:none;">
