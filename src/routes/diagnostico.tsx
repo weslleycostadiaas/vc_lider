@@ -58,6 +58,7 @@ type Etapa = "perguntas" | "analisando" | "captura";
 
 function Diagnostico() {
   const [etapa, setEtapa] = useState<Etapa>("perguntas");
+  const inicioEnviado = useRef(false);
 
   useEffect(() => {
     salvarRastreioDaUrl();
@@ -71,6 +72,17 @@ function Diagnostico() {
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
 
   useEffect(() => {
+    if (inicioEnviado.current || typeof window === "undefined") return;
+    inicioEnviado.current = true;
+    const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
+    w.dataLayer = w.dataLayer || [];
+    w.dataLayer.push({
+      event: "inicioQuiz",
+      etapa_total: PERGUNTAS.length,
+    });
+  }, []);
+
+  useEffect(() => {
     if (etapa !== "perguntas" || typeof window === "undefined") return;
     const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
     w.dataLayer = w.dataLayer || [];
@@ -80,7 +92,7 @@ function Diagnostico() {
       etapa_numero: indice + 1,
       etapa_total: PERGUNTAS.length,
       etapa_nome: `pergunta_${indice + 1}`,
-      pilar: (pergunta as { pilar?: string })?.pilar,
+      pilar: pergunta?.pilar,
     });
   }, [etapa, indice]);
 
@@ -103,7 +115,20 @@ function Diagnostico() {
       if (indice + 1 < PERGUNTAS.length) {
         setIndice(indice + 1);
       } else {
-        setResultado(calcularResultado(proximas));
+        const resultadoFinal = calcularResultado(proximas);
+        if (typeof window !== "undefined") {
+          const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
+          w.dataLayer = w.dataLayer || [];
+          w.dataLayer.push({
+            event: "fimQuiz",
+            etapa_total: PERGUNTAS.length,
+            nota_geral: resultadoFinal.notaGeral,
+            nivel: resultadoFinal.nivel.titulo,
+            pilar_critico: resultadoFinal.pilarCritico,
+            ponto_forte: resultadoFinal.pontoForte,
+          });
+        }
+        setResultado(resultadoFinal);
         setEtapa("analisando");
       }
     }, 320);
