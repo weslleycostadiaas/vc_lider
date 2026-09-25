@@ -58,24 +58,20 @@ export function gerarEventoId(): string {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
-/** Dispara o evento Lead no pixel do Meta (se instalado) e empurra o evento para o dataLayer do GTM, com o mesmo ID de evento. */
+/** Empurra o evento gerarLead para o dataLayer do GTM. O pixel da Meta é disparado exclusivamente pelo GTM — nunca pelo site. */
 export function dispararLeadPixel(eventoId: string) {
   if (typeof window === "undefined") return;
-  const w = window as unknown as {
-    fbq?: (...args: unknown[]) => void;
-    dataLayer?: unknown[];
-  };
-  if (typeof w.fbq === "function") {
-    w.fbq(
-      "track",
-      "Lead",
-      { content_name: "Radar do Líder" },
-      { eventID: eventoId },
-    );
-  }
+  const w = window as unknown as { dataLayer?: unknown[] };
   // Evento para o GTM: use "gerarLead" como gatilho de evento personalizado.
   if (Array.isArray(w.dataLayer)) {
-    w.dataLayer.push({ event: "gerarLead", evento_id: eventoId });
+    const rastreio = coletarRastreio();
+    w.dataLayer.push({
+      event: "gerarLead",
+      evento_id: eventoId,
+      url: rastreio["url"],
+      pagina: rastreio["pagina"],
+      referrer: rastreio["referrer"],
+    });
   }
 }
 
