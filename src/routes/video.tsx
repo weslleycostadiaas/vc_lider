@@ -180,7 +180,7 @@ function VideoPage() {
             className="h-14 w-full rounded-full bg-lead-terracotta px-8 text-base font-semibold text-lead-cream shadow-lg hover:bg-lead-terracotta-hover"
           >
             <a href={CTA_LINKS.lideranca} target="_blank" rel="noreferrer">
-              Quero aprimorar minha Liderança
+              Acesse aqui a Mentoria VC_Líder
             </a>
           </Button>
           <Button

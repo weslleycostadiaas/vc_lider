@@ -351,7 +351,7 @@ export function montarHtmlResultado({
   </td></tr>
 
   <tr><td style="padding:26px 0 0;text-align:center;">
-    <a href="https://vclider1.julienesalvan.com.br/" target="_blank" style="display:inline-block;border-radius:999px;background:${CORES.terracotta};color:#fffaf2;font-size:15px;font-weight:700;text-decoration:none;padding:14px 28px;">Quero aprimorar minha Lideran&#231;a</a>
+    <a href="https://vclider1.julienesalvan.com.br/" target="_blank" style="display:inline-block;border-radius:999px;background:${CORES.terracotta};color:#fffaf2;font-size:15px;font-weight:700;text-decoration:none;padding:14px 28px;">Acesse aqui a Mentoria VC_L&#237;der</a>
   </td></tr>
 
   <tr><td style="padding:22px 0 0;text-align:center;font-size:12px;line-height:1.7;color:${CORES.inkMuted};">
