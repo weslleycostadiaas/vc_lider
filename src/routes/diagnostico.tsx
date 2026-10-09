@@ -28,6 +28,7 @@ import {
 } from "@/lib/radar-email";
 
 const WEBHOOK_URL = "https://n8n.julienesalvan.com.br/webhook/captura";
+import { salvarLeadAposCaptura } from "@/lib/vcl-lead";
 
 export const Route = createFileRoute("/diagnostico")({
   staticData: { sitemap: true },
@@ -387,6 +388,13 @@ function Captura({
         }),
       });
       if (!resposta.ok) throw new Error("Falha no envio");
+      let respostaJson: unknown = null;
+      try {
+        respostaJson = await resposta.json();
+      } catch {
+        respostaJson = null;
+      }
+      salvarLeadAposCaptura(respostaJson, { nome, email, telefone });
       setStatus("sucesso");
       setSegundos(10);
     } catch {

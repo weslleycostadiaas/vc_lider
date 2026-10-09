@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { encontrarCapaPorSlug } from "@/lib/video-covers";
+import { comLeadId, getLeadId, registrarVisitaVideo, salvarLeadIdDaUrl } from "@/lib/vcl-lead";
 
 const CTA_LINKS = {
   lideranca: "https://vclider1.julienesalvan.com.br/",
@@ -58,6 +59,15 @@ function VideoPage() {
   const [demorando, setDemorando] = useState(false);
   const videoRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [leadId, setLeadId] = useState<string | null>(null);
+
+  useEffect(() => {
+    salvarLeadIdDaUrl();
+    const id = getLeadId();
+    if (!id) return;
+    setLeadId(id);
+    registrarVisitaVideo(id);
+  }, []);
 
   useEffect(() => {
     function ouvir(evento: MessageEvent) {
@@ -179,7 +189,7 @@ function VideoPage() {
             size="lg"
             className="h-14 w-full rounded-full bg-lead-terracotta px-8 text-base font-semibold text-lead-cream shadow-lg hover:bg-lead-terracotta-hover"
           >
-            <a href={CTA_LINKS.lideranca} target="_blank" rel="noreferrer">
+            <a href={comLeadId(CTA_LINKS.lideranca, leadId)} target="_blank" rel="noreferrer">
               Acesse aqui a Mentoria VC_Líder
             </a>
           </Button>
