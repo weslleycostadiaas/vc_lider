@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npx tsc --noEmit -p . 2>&1)",
+      "PowerShell(npx eslint src/routes/diagnostico.tsx src/lib/radar.ts 2>&1)",
+      "PowerShell(\\(Get-Command bun -ErrorAction SilentlyContinue\\).Source; node -v)",
+      "PowerShell(npm i --no-audit --no-fund 2>&1)",
+      "PowerShell(npm run dev)",
+      "PowerShell(foreach \\($p in \"/\", \"/diagnostico\"\\) { $r = Invoke-WebRequest -UseBasicParsing \"http://localhost:8080$p\"; \"$p -> $\\($r.StatusCode\\) | contém 'Antes de começar': $\\($r.Content -match 'Antes de come'\\)\" })"
+    ]
+  }
+}

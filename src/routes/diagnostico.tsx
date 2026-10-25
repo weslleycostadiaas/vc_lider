@@ -9,7 +9,17 @@ import {
   Users,
 } from "lucide-react";
 
-import { OPCOES, PERGUNTAS, calcularResultado, type Resultado } from "@/lib/radar";
+import {
+  OPCOES,
+  PERGUNTAS,
+  PERGUNTA_EQUIPE,
+  PERGUNTA_MOMENTO,
+  calcularResultado,
+  rotuloQualificacao,
+  type PerguntaQualificacao,
+  type Qualificacao,
+  type Resultado,
+} from "@/lib/radar";
 import {
   coletarRastreio,
   dispararLeadPixel,
@@ -55,10 +65,13 @@ export const Route = createFileRoute("/diagnostico")({
   component: Diagnostico,
 });
 
-type Etapa = "perguntas" | "analisando" | "captura";
+type Etapa = "qualificacao" | "perguntas" | "analisando" | "captura";
 
 function Diagnostico() {
-  const [etapa, setEtapa] = useState<Etapa>("perguntas");
+  const [etapa, setEtapa] = useState<Etapa>("qualificacao");
+  const [qualIndice, setQualIndice] = useState<0 | 1>(0);
+  const [qualSelecionada, setQualSelecionada] = useState<string | null>(null);
+  const [qualificacao, setQualificacao] = useState<Qualificacao>({ momento: null, equipe: null });
   const inicioEnviado = useRef(false);
 
   useEffect(() => {
@@ -98,7 +111,17 @@ function Diagnostico() {
   }, [etapa, indice]);
 
   useEffect(() => {
-    if (typeof window === "undefined" || etapa === "perguntas") return;
+    if (etapa !== "qualificacao" || typeof window === "undefined") return;
+    const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
+    w.dataLayer = w.dataLayer || [];
+    w.dataLayer.push({
+      event: "etapaQuiz",
+      etapa_nome: qualIndice === 0 ? "qualificacao_momento" : "qualificacao_equipe",
+    });
+  }, [etapa, qualIndice]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || etapa === "perguntas" || etapa === "qualificacao") return;
     const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
     w.dataLayer = w.dataLayer || [];
     w.dataLayer.push({ event: "etapaQuiz", etapa_nome: etapa });
@@ -135,9 +158,40 @@ function Diagnostico() {
     }, 320);
   }
 
+  function responderQualificacao(valor: string) {
+    if (qualSelecionada !== null) return;
+    setQualSelecionada(valor);
+    const lidera = valor === "ja_lidera";
+    if (qualIndice === 0) {
+      // Quem deixa de ser "já lidero" não tem tamanho de equipe.
+      setQualificacao((q) => ({ momento: valor, equipe: lidera ? q.equipe : null }));
+    } else {
+      setQualificacao((q) => ({ ...q, equipe: valor }));
+    }
+
+    timer.current = setTimeout(() => {
+      setQualSelecionada(null);
+      if (qualIndice === 0 && lidera) {
+        setQualIndice(1);
+      } else {
+        setEtapa("perguntas");
+      }
+    }, 320);
+  }
+
+  function voltarQualificacao() {
+    if (qualIndice === 0) return;
+    setQualSelecionada(null);
+    setQualIndice(0);
+  }
+
   function voltar() {
-    if (indice === 0) return;
     setSelecionada(null);
+    if (indice === 0) {
+      setQualIndice(qualificacao.momento === "ja_lidera" ? 1 : 0);
+      setEtapa("qualificacao");
+      return;
+    }
     setIndice(indice - 1);
   }
 
@@ -146,6 +200,17 @@ function Diagnostico() {
       <div
         className={`mx-auto w-full ${etapa === "captura" ? "max-w-[52rem]" : "max-w-2xl"}`}
       >
+        {etapa === "qualificacao" && (
+          <PerguntaQualificacaoCard
+            key={qualIndice}
+            pergunta={qualIndice === 0 ? PERGUNTA_MOMENTO : PERGUNTA_EQUIPE}
+            primeira={qualIndice === 0}
+            selecionada={qualSelecionada}
+            onResponder={responderQualificacao}
+            onVoltar={voltarQualificacao}
+          />
+        )}
+
         {etapa === "perguntas" && (
           <Perguntas
             indice={indice}
@@ -158,8 +223,83 @@ function Diagnostico() {
         {etapa === "analisando" && <Analisando onFim={() => setEtapa("captura")} />}
 
         {etapa === "captura" && resultado && (
-          <Captura resultado={resultado} respostas={respostas} />
+          <Captura resultado={resultado} respostas={respostas} qualificacao={qualificacao} />
         )}
+      </div>
+    </div>
+  );
+}
+
+/* ---------------- Qualificação ---------------- */
+
+function PerguntaQualificacaoCard({
+  pergunta,
+  primeira,
+  selecionada,
+  onResponder,
+  onVoltar,
+}: {
+  pergunta: PerguntaQualificacao;
+  primeira: boolean;
+  selecionada: string | null;
+  onResponder: (valor: string) => void;
+  onVoltar: () => void;
+}) {
+  return (
+    <div className="rounded-3xl border border-quiz-border bg-quiz-card p-6 shadow-[0_18px_44px_-28px_rgba(59,42,32,0.35)] md:p-9">
+      <p className="font-mono text-xs font-bold uppercase tracking-wider text-quiz-terracotta">
+        Antes de começar
+      </p>
+      <p className="mt-1 text-sm text-quiz-ink-muted">
+        Conte um pouco sobre você para personalizarmos o seu diagnóstico.
+      </p>
+
+      <div className="radar-fade-up">
+        <h1 className="mt-7 text-xl font-medium leading-relaxed text-quiz-ink md:text-2xl">
+          {pergunta.texto}
+        </h1>
+
+        <div className="mt-6 grid gap-3">
+          {pergunta.opcoes.map((opcao) => {
+            const ativa = selecionada === opcao.valor;
+            return (
+              <button
+                key={opcao.valor}
+                type="button"
+                onClick={() => onResponder(opcao.valor)}
+                className={`w-full rounded-2xl border px-5 py-4 text-left text-base transition-colors duration-200 ${
+                  ativa
+                    ? "border-quiz-terracotta bg-quiz-terracotta text-quiz-card"
+                    : "border-quiz-border bg-quiz-bg/60 text-quiz-ink hover:border-quiz-terracotta hover:bg-quiz-terracotta-soft"
+                }`}
+              >
+                {opcao.rotulo}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-7 flex flex-col gap-2 border-t border-quiz-border pt-5 sm:flex-row sm:items-center sm:justify-between">
+        {primeira ? (
+          <Link
+            to="/"
+            className="text-sm text-quiz-ink-muted transition-colors hover:text-quiz-terracotta"
+          >
+            ← Voltar
+          </Link>
+        ) : (
+          <button
+            type="button"
+            onClick={onVoltar}
+            className="text-sm text-quiz-ink-muted transition-colors hover:text-quiz-terracotta"
+          >
+            ← Voltar
+          </button>
+        )}
+        <p className="font-mono text-xs uppercase tracking-wider text-quiz-ink-muted">
+          Ao escolher, avança sozinho
+        </p>
       </div>
     </div>
   );
@@ -226,22 +366,13 @@ function Perguntas({
       </div>
 
       <div className="mt-7 flex flex-col gap-2 border-t border-quiz-border pt-5 sm:flex-row sm:items-center sm:justify-between">
-        {indice > 0 ? (
-          <button
-            type="button"
-            onClick={onVoltar}
-            className="text-sm text-quiz-ink-muted transition-colors hover:text-quiz-terracotta"
-          >
-            ← Voltar
-          </button>
-        ) : (
-          <Link
-            to="/"
-            className="text-sm text-quiz-ink-muted transition-colors hover:text-quiz-terracotta"
-          >
-            ← Voltar
-          </Link>
-        )}
+        <button
+          type="button"
+          onClick={onVoltar}
+          className="text-sm text-quiz-ink-muted transition-colors hover:text-quiz-terracotta"
+        >
+          ← Voltar
+        </button>
         <p className="font-mono text-xs uppercase tracking-wider text-quiz-ink-muted">
           Ao escolher, avança sozinho
         </p>
@@ -303,9 +434,11 @@ function mascararTelefone(valor: string) {
 function Captura({
   resultado,
   respostas,
+  qualificacao,
 }: {
   resultado: Resultado;
   respostas: number[];
+  qualificacao: Qualificacao;
 }) {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
@@ -384,6 +517,10 @@ function Captura({
           dominio_site: "https://radar.julienesalvan.com.br",
           pilares: resultado.pilares,
           respostas,
+          momento_lideranca: qualificacao.momento,
+          momento_lideranca_texto: rotuloQualificacao(PERGUNTA_MOMENTO, qualificacao.momento),
+          tamanho_equipe: qualificacao.equipe,
+          tamanho_equipe_texto: rotuloQualificacao(PERGUNTA_EQUIPE, qualificacao.equipe),
           data: new Date().toISOString(),
         }),
       });

@@ -89,6 +89,46 @@ export const OPCOES = [
   { valor: 5, rotulo: "Sempre" },
 ] as const;
 
+export type OpcaoQualificacao = { valor: string; rotulo: string };
+
+export type PerguntaQualificacao = {
+  texto: string;
+  opcoes: OpcaoQualificacao[];
+};
+
+/** Perguntas de qualificação, feitas antes do diagnóstico. Não entram no cálculo da nota. */
+export const PERGUNTA_MOMENTO: PerguntaQualificacao = {
+  texto: "Qual é o seu momento atual na liderança?",
+  opcoes: [
+    { valor: "ja_lidera", rotulo: "Já lidero uma equipe." },
+    { valor: "preparando", rotulo: "Estou me preparando para assumir minha primeira equipe." },
+    {
+      valor: "nao_lidera",
+      rotulo: "Ainda não lidero, mas quero desenvolver minhas habilidades de liderança.",
+    },
+  ],
+};
+
+/** Só aparece para quem responde "Já lidero uma equipe." na pergunta de momento. */
+export const PERGUNTA_EQUIPE: PerguntaQualificacao = {
+  texto: "Quantas pessoas estão sob sua liderança atualmente?",
+  opcoes: [
+    { valor: "1-10", rotulo: "1 a 10 pessoas" },
+    { valor: "11-30", rotulo: "11 a 30 pessoas" },
+    { valor: "31-50", rotulo: "31 a 50 pessoas" },
+    { valor: "50+", rotulo: "Mais de 50 pessoas" },
+  ],
+};
+
+export type Qualificacao = {
+  momento: string | null;
+  equipe: string | null;
+};
+
+export function rotuloQualificacao(pergunta: PerguntaQualificacao, valor: string | null) {
+  return pergunta.opcoes.find((o) => o.valor === valor)?.rotulo ?? null;
+}
+
 /** Ordem de prioridade para desempates. */
 const PRIORIDADE: Pilar[] = ["Mentalidade", "Pessoas", "Ação", "Aprendizado Contínuo"];
 
