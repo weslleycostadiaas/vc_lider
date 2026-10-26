@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import {
   BarChart3,
@@ -453,15 +453,7 @@ function Captura({
   }>({});
   const [erroEnvio, setErroEnvio] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "enviando" | "sucesso" | "erro" | "concluido">("idle");
-  const [segundos, setSegundos] = useState(10);
-  // A página embutida só recebe o scroll depois que o cabeçalho saiu da tela;
-  // antes disso, o scroll empurra o cabeçalho para cima.
-  const [iframeAtivo, setIframeAtivo] = useState(false);
-
-  function aoRolarSucesso(event: React.UIEvent<HTMLDivElement>) {
-    const el = event.currentTarget;
-    setIframeAtivo(el.scrollTop >= el.scrollHeight - el.clientHeight - 2);
-  }
+  const navigate = useNavigate();
 
   async function enviar(e: React.FormEvent) {
     e.preventDefault();
@@ -541,7 +533,7 @@ function Captura({
       }
       salvarLeadAposCaptura(respostaJson, { nome, email, telefone });
       setStatus("sucesso");
-      setSegundos(10);
+      void navigate({ to: "/obrigado" });
     } catch {
       setErroEnvio(
         "Não conseguimos enviar o seu diagnóstico agora. Confira a sua conexão e tente novamente.",
@@ -550,14 +542,7 @@ function Captura({
     }
   }
 
-  const envioFinalizado = status === "sucesso";
   const bloqueado = status !== "idle";
-
-  useEffect(() => {
-    if (!envioFinalizado || segundos <= 0) return;
-    const t = setInterval(() => setSegundos((s) => s - 1), 1000);
-    return () => clearInterval(t);
-  }, [envioFinalizado, segundos]);
 
   const pilaresOrdenados = ["Mentalidade", "Ação", "Pessoas", "Aprendizado Contínuo"]
     .map((nome) => resultado.pilares.find((pilar) => pilar.pilar === nome))
@@ -746,36 +731,6 @@ function Captura({
           Seus dados ficam protegidos.
         </p>
       </form>
-
-      {status === "sucesso" && (
-        <div
-          onScroll={aoRolarSucesso}
-          className="fixed inset-0 z-50 overflow-y-auto bg-quiz-bg"
-        >
-          <div className="mx-auto w-full max-w-5xl px-4 py-10 text-center sm:px-8 md:py-14">
-            <h2 className="font-display text-2xl uppercase leading-tight text-quiz-ink md:text-3xl">
-              Pronto. O seu diagnóstico completo está a caminho
-            </h2>
-            <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-quiz-ink-muted">
-              Acabei de enviar pro seu e-mail a sua análise personalizada e o vídeo em que eu
-              explico o seu resultado e o próximo passo.
-            </p>
-            <p className="mx-auto mt-3 max-w-md text-base leading-relaxed text-quiz-ink-muted">
-              Abra agora. Se não achar em alguns minutos, olhe em promoções ou spam e marque como
-              “não é spam”.
-            </p>
-
-            <h3 className="mt-10 font-display text-xl uppercase leading-tight text-quiz-ink md:text-2xl">
-              Enquanto seu email não chega, conheça o VC_Líder:
-            </h3>
-          </div>
-          <iframe
-            src="https://vclider1.julienesalvan.com.br/"
-            title="Conheça o VC_Líder"
-            className={`block h-screen w-full border-0 ${iframeAtivo ? "" : "pointer-events-none"}`}
-          />
-        </div>
-      )}
     </div>
   );
 }
