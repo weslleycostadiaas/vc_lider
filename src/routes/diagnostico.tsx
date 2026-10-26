@@ -443,7 +443,7 @@ function Captura({
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [telefone, setTelefone] = useState("");
-  const [consentimento, setConsentimento] = useState(false);
+  const [consentimento, setConsentimento] = useState(true);
   const [erros, setErros] = useState<{
     nome?: string;
     email?: string;
@@ -733,46 +733,29 @@ function Captura({
       </form>
 
       {status === "sucesso" && (
-        <div
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-quiz-ink/60 p-4 backdrop-blur-sm sm:items-center"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="radar-fade-up relative m-auto w-full max-w-lg rounded-3xl border border-quiz-border bg-quiz-card p-8 text-center shadow-[0_24px_64px_-28px_rgba(59,42,32,0.45)] sm:p-10">
-            <p className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-quiz-ink-muted">
-              {"\n"}
-            </p>
-            <h2 className="mt-4 font-display text-2xl uppercase leading-tight text-quiz-ink md:text-3xl">
-              Pronto. O seu diagnóstico completo está a caminho.
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-quiz-bg">
+          <div className="mx-auto w-full max-w-5xl px-4 py-10 text-center sm:px-8 md:py-14">
+            <h2 className="font-display text-2xl uppercase leading-tight text-quiz-ink md:text-3xl">
+              Pronto. O seu diagnóstico completo está a caminho
             </h2>
             <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-quiz-ink-muted">
               Acabei de enviar pro seu e-mail a sua análise personalizada e o vídeo em que eu
-              explico o seu resultado e o próximo passo. Abra agora. Se não achar em alguns minutos,
-              olhe em promoções ou spam e marque como “não é spam”.
+              explico o seu resultado e o próximo passo.
+            </p>
+            <p className="mx-auto mt-3 max-w-md text-base leading-relaxed text-quiz-ink-muted">
+              Abra agora. Se não achar em alguns minutos, olhe em promoções ou spam e marque como
+              “não é spam”.
             </p>
 
-            {segundos > 0 ? (
-              <div className="mt-7">
-                <div className="mx-auto h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-quiz-bg-soft">
-                  <div
-                    className="h-full rounded-full bg-quiz-terracotta transition-all duration-1000 ease-linear"
-                    style={{ width: `${((10 - segundos) / 10) * 100}%` }}
-                  />
-                </div>
-                <p className="mt-3 font-mono text-xs uppercase tracking-wider text-quiz-ink-muted">
-                  Fique atento ao seu e-mail · {segundos}s
-                </p>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setStatus("concluido")}
-                className="mt-7 w-full rounded-full bg-quiz-terracotta px-6 py-4 text-base font-semibold text-quiz-card shadow-[0_14px_32px_-16px_rgba(196,71,42,0.6)] transition-colors duration-200 hover:bg-quiz-terracotta-hover sm:text-lg"
-              >
-                Fechar
-              </button>
-            )}
+            <h3 className="mt-10 font-display text-xl uppercase leading-tight text-quiz-ink md:text-2xl">
+              Enquanto seu email não chega, conheça o VC_Líder
+            </h3>
           </div>
+          <iframe
+            src="https://vclider1.julienesalvan.com.br/"
+            title="Conheça o VC_Líder"
+            className="block h-screen w-full border-0"
+          />
         </div>
       )}
     </div>
