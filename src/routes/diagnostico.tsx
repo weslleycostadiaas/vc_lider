@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import {
   BarChart3,
+  Check,
   Lightbulb,
   Loader2,
   LockKeyhole,
@@ -453,7 +454,14 @@ function Captura({
   const [erroEnvio, setErroEnvio] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "enviando" | "sucesso" | "erro" | "concluido">("idle");
   const [segundos, setSegundos] = useState(10);
+  // A página embutida só recebe o scroll depois que o cabeçalho saiu da tela;
+  // antes disso, o scroll empurra o cabeçalho para cima.
+  const [iframeAtivo, setIframeAtivo] = useState(false);
 
+  function aoRolarSucesso(event: React.UIEvent<HTMLDivElement>) {
+    const el = event.currentTarget;
+    setIframeAtivo(el.scrollTop >= el.scrollHeight - el.clientHeight - 2);
+  }
 
   async function enviar(e: React.FormEvent) {
     e.preventDefault();
@@ -683,13 +691,20 @@ function Captura({
         />
 
         <label className={`mt-4 flex items-start gap-3 text-sm leading-relaxed text-quiz-ink-muted ${bloqueado ? "cursor-default opacity-60" : "cursor-pointer"}`}>
-          <input
-            type="checkbox"
-            checked={consentimento}
-            disabled={bloqueado}
-            onChange={(event) => setConsentimento(event.target.checked)}
-            className="mt-0.5 h-5 w-5 shrink-0 appearance-none rounded border border-quiz-terracotta bg-quiz-card checked:bg-quiz-terracotta focus:outline-none focus:ring-2 focus:ring-quiz-terracotta/30 disabled:cursor-not-allowed"
-          />
+          <span className="relative mt-0.5 flex h-5 w-5 shrink-0">
+            <input
+              type="checkbox"
+              checked={consentimento}
+              disabled={bloqueado}
+              onChange={(event) => setConsentimento(event.target.checked)}
+              className="peer h-5 w-5 appearance-none rounded border border-quiz-terracotta bg-quiz-card checked:bg-quiz-terracotta focus:outline-none focus:ring-2 focus:ring-quiz-terracotta/30 disabled:cursor-not-allowed"
+            />
+            <Check
+              aria-hidden="true"
+              strokeWidth={3}
+              className="pointer-events-none absolute inset-0 m-auto hidden h-3.5 w-3.5 text-quiz-card peer-checked:block"
+            />
+          </span>
           <span>
             Autorizo a Juliene Salvan a me enviar o meu diagnóstico e conteúdos por e-mail e
             WhatsApp.
@@ -733,7 +748,10 @@ function Captura({
       </form>
 
       {status === "sucesso" && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-quiz-bg">
+        <div
+          onScroll={aoRolarSucesso}
+          className="fixed inset-0 z-50 overflow-y-auto bg-quiz-bg"
+        >
           <div className="mx-auto w-full max-w-5xl px-4 py-10 text-center sm:px-8 md:py-14">
             <h2 className="font-display text-2xl uppercase leading-tight text-quiz-ink md:text-3xl">
               Pronto. O seu diagnóstico completo está a caminho
@@ -748,13 +766,13 @@ function Captura({
             </p>
 
             <h3 className="mt-10 font-display text-xl uppercase leading-tight text-quiz-ink md:text-2xl">
-              Enquanto seu email não chega, conheça o VC_Líder
+              Enquanto seu email não chega, conheça o VC_Líder:
             </h3>
           </div>
           <iframe
             src="https://vclider1.julienesalvan.com.br/"
             title="Conheça o VC_Líder"
-            className="block h-screen w-full border-0"
+            className={`block h-screen w-full border-0 ${iframeAtivo ? "" : "pointer-events-none"}`}
           />
         </div>
       )}
